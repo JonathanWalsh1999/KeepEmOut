@@ -15,7 +15,7 @@ AMyPlayer::AMyPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	SetActorLocation(FVector(5418.353067f, -23084.224882f, 90.150003f));//Set initial position for player
+	SetActorLocation(FVector(5560.0f, -22600.0f, 90.15f));//Set initial position for player
 	
 	// Instantiating your class Components
 
