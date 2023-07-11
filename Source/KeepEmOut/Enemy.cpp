@@ -3,8 +3,11 @@
 
 #include "Enemy.h"
 
+
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AEnemy::AEnemy()
@@ -25,6 +28,7 @@ AEnemy::AEnemy()
 	//USkeletalMesh* mesh;
 	//	MeshComp->SetSkeletalMesh(mesh);
 
+	Player = Cast<AMyPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), 0));
 
 
 }
@@ -32,6 +36,8 @@ AEnemy::AEnemy()
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
+	
+	SetActorLocation(FVector(6140.0f, -11600.0f, 660.0f));//Set initial position for enemy
 	Super::BeginPlay();
 	
 }
@@ -40,11 +46,24 @@ void AEnemy::BeginPlay()
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	Player->SetPosition(newPos);
+	
+	LookAt(*this, Player->GetActorLocation());
 
+
+	//Which way is forward
+
+	const FRotator Rotation = this->GetActorRotation(); //Store rotation value
+	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	//Get facing vector
+	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);//Unreal's axes are different to Unity's. X = Z in Unity, Y = X in Unity, Z =  Y in Unity
+	AddMovementInput(Direction, currentValue.Y);
 }
 
-//USkeletalMesh* AEnemy::ImportSkeletalMesh(FString SourcePath, FString DestinationPath, bool& bOutSucess, FString& OutInforMessage)
-//{
-//	//USkeletalMesh* asset = Cast<USkeletalMesh>()
-//	U_3_Import
-//}
+void AEnemy::LookAt(AEnemy& LookingActor, FVector TargetPosition, FVector WorldUp = FVector::UpVector)
+{
+	FVector Forward = TargetPosition - LookingActor.GetActorLocation(); //Get forward facing vector
+	FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, WorldUp); //Get rotation
+	LookingActor.SetActorRotation(Rot);
+}

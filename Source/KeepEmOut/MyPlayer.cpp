@@ -15,7 +15,7 @@ AMyPlayer::AMyPlayer()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	SetActorLocation(FVector(5560.0f, -22600.0f, 90.15f));//Set initial position for player
+	
 	
 	// Instantiating your class Components
 
@@ -53,6 +53,8 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetActorLocation(FVector(5500.0f, -22600.0f, 0.0f));//Set initial position for player
 
 	APlayerController* playerController = Cast<APlayerController>(GetController()); //pointer to access subsystem
 	if (playerController)
@@ -154,4 +156,10 @@ void AMyPlayer::SpawnActor()
 	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	GetWorld()->SpawnActor<AActor>(actorBPToSpawn, GetActorTransform(), spawnParams);
+}
+
+void AMyPlayer::SetPosition(FVector& pos)
+{
+	//SetActorLocation(pos);//Set initial position for player
+	UE_LOG(LogTemp, Warning, TEXT("hello from enemy :)"));
 }

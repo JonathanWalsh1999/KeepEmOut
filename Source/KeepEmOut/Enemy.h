@@ -2,9 +2,14 @@
 
 #pragma once
 
+
+#include "MyPlayer.h"
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
+
 
 UCLASS()
 class KEEPEMOUT_API AEnemy : public AActor
@@ -27,6 +32,9 @@ protected:
 		class USkeletalMeshComponent* MeshComp;
 
 
+		AMyPlayer* Player;
+		FVector newPos = FVector(4300.0f, -22600.0f, 0.0f);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -36,4 +44,6 @@ public:
 	
 
 	USceneComponent* Root;
+
+	void LookAt(AEnemy& LookingActor, FVector TargetPosition, FVector WorldUp = FVector::UpVector);
 };
