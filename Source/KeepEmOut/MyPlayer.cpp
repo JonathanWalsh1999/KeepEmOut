@@ -161,5 +161,5 @@ void AMyPlayer::SpawnActor()
 void AMyPlayer::SetPosition(FVector& pos)
 {
 	//SetActorLocation(pos);//Set initial position for player
-	UE_LOG(LogTemp, Warning, TEXT("hello from enemy :)"));
+	//UE_LOG(LogTemp, Warning, TEXT("hello from enemy :)"));
 }

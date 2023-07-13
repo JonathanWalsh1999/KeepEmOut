@@ -8,6 +8,8 @@
 #include "Components/CapsuleComponent.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include <string>
+
 
 // Sets default values
 AEnemy::AEnemy()
@@ -28,7 +30,7 @@ AEnemy::AEnemy()
 	//USkeletalMesh* mesh;
 	//	MeshComp->SetSkeletalMesh(mesh);
 
-	Player = Cast<AMyPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), 0));
+
 
 
 }
@@ -36,8 +38,10 @@ AEnemy::AEnemy()
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
+	Player = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	
-	SetActorLocation(FVector(6140.0f, -11600.0f, 660.0f));//Set initial position for enemy
+	//Player = Cast<AMyPlayer>(UGameplayStatics::GetActorOfClass(GetWorld(), 0));
+	SetActorLocation(newPos);//Set initial position for enemy
 	Super::BeginPlay();
 	
 }
@@ -46,9 +50,11 @@ void AEnemy::BeginPlay()
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Player->SetPosition(newPos);
-	
-	LookAt(*this, Player->GetActorLocation());
+	//Player = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (Player != nullptr)
+	{
+		MyLookAt(Player->GetTargetLocation(), FVector::UpVector);
+	}
 
 
 	//Which way is forward
@@ -58,12 +64,15 @@ void AEnemy::Tick(float DeltaTime)
 
 	//Get facing vector
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);//Unreal's axes are different to Unity's. X = Z in Unity, Y = X in Unity, Z =  Y in Unity
-	AddMovementInput(Direction, currentValue.Y);
+	
 }
 
-void AEnemy::LookAt(AEnemy& LookingActor, FVector TargetPosition, FVector WorldUp = FVector::UpVector)
+void AEnemy::MyLookAt(FVector TargetPosition, FVector WorldUp = FVector::UpVector)
 {
-	FVector Forward = TargetPosition - LookingActor.GetActorLocation(); //Get forward facing vector
+	FVector Forward =  TargetPosition - this->GetActorLocation() * 200; //Get forward facing vector
 	FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, WorldUp); //Get rotation
-	LookingActor.SetActorRotation(Rot);
+	//this->SetActorRotation(Rot);
+	MeshComp->SetWorldRotation(Rot);
+	UE_LOG(LogTemp, Warning, TEXT("Rotation is %s"));
+	//UE_LOG(LogTemp, Warning, TEXT("Rotation is %s"), Rot);
 }

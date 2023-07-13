@@ -32,8 +32,8 @@ protected:
 		class USkeletalMeshComponent* MeshComp;
 
 
-		AMyPlayer* Player;
-		FVector newPos = FVector(4300.0f, -22600.0f, 0.0f);
+		APlayerController* Player;
+		FVector newPos = FVector(6300.0f, -21600.0f, 660.0f);
 
 public:	
 	// Called every frame
@@ -45,5 +45,5 @@ public:
 
 	USceneComponent* Root;
 
-	void LookAt(AEnemy& LookingActor, FVector TargetPosition, FVector WorldUp = FVector::UpVector);
+	void MyLookAt(FVector TargetPosition, FVector WorldUp);
 };
